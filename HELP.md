@@ -39,7 +39,7 @@ docker compose ps
 ## 運行方式 - Windows
 
 ```powershell
-./mvnw spring-boot:run
+.\mvnw spring-boot:run
 ```
 
 ![運行專案](assets/homework-backend-5.jpg)
