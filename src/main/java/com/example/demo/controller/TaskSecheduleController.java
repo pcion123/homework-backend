@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.constant.TaskStatus;
 import com.example.demo.dto.TaskCreateRequestDto;
+import com.example.demo.dto.TaskDetailResponseDto;
 import com.example.demo.dto.TaskPageResponseDto;
 import com.example.demo.dto.TaskResponseDto;
 import com.example.demo.exception.GeneralRuntimeException;
@@ -51,10 +52,12 @@ public class TaskSecheduleController {
     }
 
     @GetMapping("/{taskId}")
-    public ResponseEntity<TaskResponseDto> getTask(@PathVariable String taskId) {
+    public ResponseEntity<?> getTask(@PathVariable String taskId) {
         return taskJobService.findById(taskId)
-                .map(taskJob -> ResponseEntity.ok(TaskResponseDto.from(taskJob)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .<ResponseEntity<?>>map(
+                        taskJob -> ResponseEntity.ok(TaskDetailResponseDto.from(taskJob)))
+                .orElseGet(
+                        () -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found."));
     }
 
     @DeleteMapping("/{taskId}")
@@ -72,12 +75,12 @@ public class TaskSecheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<TaskPageResponseDto> listTasks(
-            @RequestParam(defaultValue = "pending") String status,
+    public ResponseEntity<?> listTasks(@RequestParam(defaultValue = "pending") String status,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         if (page < 1 || size <= 0) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Page number must be greater than 0 and size must be greater than 0.");
         }
 
         return TaskStatus.fromValue(status)
