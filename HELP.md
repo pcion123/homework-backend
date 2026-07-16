@@ -10,6 +10,14 @@ pwd
 
 ![查看專案根目錄](assets/homework-backend-1.jpg)
 
+## 建立 logs 目錄
+
+在專案根目錄底下先建立 `logs` 目錄，讓應用程式與 Docker 容器可以正常寫入日誌：
+
+```powershell
+mkdir -p logs
+```
+
 ## 啟動依賴服務
 
 執行應用程式前，需要先啟動 Docker Compose 內的 MySQL、Redis、RocketMQ 等服務：
@@ -62,3 +70,16 @@ docker run --rm -p 8080:8080 \
 ```
 
 ![運行 Docker 容器](assets/homework-backend-7.jpg)
+
+## Postman 導入說明
+
+專案根目錄已提供 Postman Collection 檔案：`homework-backend.postman_collection.json`。
+
+導入步驟：
+
+1. 開啟 Postman。
+2. 點擊左上角 `Import`。
+3. 選擇專案根目錄底下的 `homework-backend.postman_collection.json`。
+4. 匯入完成後，會看到 `homework-backend` collection。
+5. 請先確認應用程式已啟動，並運行在 `http://127.0.0.1:8080`，再執行 collection 內的 API。
+
